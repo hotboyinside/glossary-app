@@ -22,5 +22,4 @@ jobs:
           script: |
             cd /var/www/glossary/glossary-app/deploy
             sudo git pull
-            docker compose -f docker-compose.prod.yml build
-            docker compose -f docker-compose.prod.yml up -d
+            docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build
