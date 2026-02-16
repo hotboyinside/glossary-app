@@ -37,7 +37,7 @@ const app = Fastify({
 });
 
 app.register(cors, {
-	origin: vars.FRONTEND_URL,
+	origin: vars.ORIGIN_URL,
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 	credentials: true,
 });
