@@ -21,6 +21,6 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd /var/www/glossary/glossary-app/deploy
-            git pull
+            sudo git pull
             docker compose -f docker-compose.prod.yml build
             docker compose -f docker-compose.prod.yml up -d
