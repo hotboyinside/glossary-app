@@ -4,9 +4,11 @@ services:
     restart: unless-stopped
     volumes:
       - mongo_data:/data/db
+    env_file:
+      - .env.prod
     environment:
-      MONGO_INITDB_ROOT_USERNAME: user
-      MONGO_INITDB_ROOT_PASSWORD: pass
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
 
   app:
     build:
@@ -14,22 +16,36 @@ services:
     restart: unless-stopped
     depends_on:
       - mongodb
+    env_file:
+      - .env.prod
     environment:
-      FRONTEND_URL: http://158.160.148.51:3000
-      MONGO_URL: mongodb://user:pass@mongodb:27017/glossary?authSource=admin
-      NODE_ENV: production
-      LOG_LEVEL: info
+      MONGO_URL: mongodb://${MONGO_ROOT_USER}:${MONGO_ROOT_PASSWORD}@mongodb:27017/${MONGO_DB}?authSource=admin
     ports:
-      - '5000:5000'
+      - '5000'
 
   web-client:
     build:
       context: ../web-client
       args:
-        NEXT_PUBLIC_API_URL: http://158.160.148.51:5000
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     restart: unless-stopped
     ports:
-      - '3000:3000'
+      - '3000'
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    depends_on:
+      - app
+      - web-client
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/certs:/etc/letsencrypt
+    networks:
+      - default
 
 volumes:
   mongo_data:
