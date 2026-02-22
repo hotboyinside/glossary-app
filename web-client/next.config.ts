@@ -12,7 +12,6 @@ const cspHeader = `
     upgrade-insecure-requests;
     connect-src 'self' https://mc.yandex.ru;
     frame-ancestors 'self' https://metrika.yandex.ru https://metrica.yandex.com https://*.webvisor.com;
-    child-src 'self' blob: https://mc.yandex.ru;
 `;
 
 const nextConfig: NextConfig = {
