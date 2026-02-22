@@ -24,35 +24,27 @@ export default function Metrika() {
     const params = searchParams.toString();
     const url = base + pathName + (params ? '?' + params : '');
 
-    if (typeof window !== 'undefined' && window.ym) {
+    if (window.ym) {
       window.ym(106953773, 'hit', url);
     }
   }, [pathName, searchParams]);
 
   return (
-    <Script id="metrika" strategy="afterInteractive">
-      {`
-        (function(m,e,t,r,i,k,a){
-          m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-          m[i].l=1*new Date();
-          for (var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}
-          k=e.createElement(t),a=e.getElementsByTagName(t)[0];
-          k.async=1;
-          k.src=r;
-          a.parentNode.insertBefore(k,a);
-        })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js?id=106953773", "ym");
-
-        ym(106953773, "init", {
+    <Script
+      src="https://mc.yandex.ru/metrika/tag.js?id=106953773"
+      strategy="afterInteractive"
+      onLoad={() => {
+        window.ym?.(106953773, 'init', {
           ssr: true,
           webvisor: true,
           clickmap: true,
-          ecommerce: "dataLayer",
+          ecommerce: 'dataLayer',
           referrer: document.referrer,
           url: location.href,
           accurateTrackBounce: true,
-          trackLinks: true
+          trackLinks: true,
         });
-      `}
-    </Script>
+      }}
+    />
   );
 }
