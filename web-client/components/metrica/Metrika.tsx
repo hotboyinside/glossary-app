@@ -10,7 +10,6 @@ export default function Metrika() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    // Теперь window.ym гарантированно существует к этому моменту
     if (typeof window !== 'undefined' && window.ym) {
       window.ym(COUNTER_ID, 'hit', window.location.href);
     }
