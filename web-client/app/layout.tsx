@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/navbar/Navbar';
+import Metrika from '@/components/metrica/Metrika';
+import { Suspense } from 'react';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -26,43 +27,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        {/* Yandex.Metrika counter */}
-        <Script
-          id="yandex-metrika"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(m,e,t,r,i,k,a){
-                  m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-                  m[i].l=1*new Date();
-                  k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-              })(window, document,"script","https://mc.yandex.ru/metrika/tag.js","ym");
-
-              ym(106953773, "init", {
-                clickmap:true,
-                trackLinks:true,
-                accurateTrackBounce:true,
-                webvisor:true
-              });
-            `,
-          }}
-        />
-        {/* /Yandex.Metrika counter */}
-      </head>
-
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <noscript>
-          <div>
-            <img
-              src="https://mc.yandex.ru/watch/106953773"
-              style={{ position: 'absolute', left: '-9999px' }}
-              alt=""
-            />
-          </div>
-        </noscript>
         <Navbar />
         <main className="pt-16">{children}</main>
+        <Suspense>
+          <Metrika />
+        </Suspense>
       </body>
     </html>
   );
