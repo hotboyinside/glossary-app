@@ -29,6 +29,7 @@ export default function Metrika() {
 
           ym(${COUNTER_ID}, "init", {
             defer: true,
+            ssr: true,
             clickmap:true,
             trackLinks:true,
             accurateTrackBounce:true,
