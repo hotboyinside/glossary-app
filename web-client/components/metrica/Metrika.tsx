@@ -24,7 +24,7 @@ export default function Metrika() {
     const params = searchParams.toString();
     const url = base + pathName + (params ? '?' + params : '');
 
-    if (window.ym) {
+    if (typeof window !== 'undefined' && window.ym) {
       window.ym(106953773, 'hit', url);
     }
   }, [pathName, searchParams]);
