@@ -27,6 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Yandex.Metrika counter */}
         <Script
           id="yandex-metrika"
           strategy="afterInteractive"
@@ -35,25 +36,19 @@ export default function RootLayout({
               (function(m,e,t,r,i,k,a){
                   m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
                   m[i].l=1*new Date();
-                  for (var j = 0; j < document.scripts.length; j++) {
-                      if (document.scripts[j].src === r) { return; }
-                  }
                   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-              })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=106953773', 'ym');
+              })(window, document,"script","https://mc.yandex.ru/metrika/tag.js","ym");
 
-              ym(106953773, 'init', {
-                ssr:true,
-                webvisor:true,
+              ym(106953773, "init", {
                 clickmap:true,
-                ecommerce:"dataLayer",
-                referrer: document.referrer,
-                url: location.href,
+                trackLinks:true,
                 accurateTrackBounce:true,
-                trackLinks:true
+                webvisor:true
               });
             `,
           }}
         />
+        {/* /Yandex.Metrika counter */}
       </head>
 
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
