@@ -2,9 +2,9 @@ import type { NextConfig } from 'next';
 
 const cspHeader = `
     default-src 'self';
-    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://mc.yandex.ru;
+    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://mc.yandex.ru https://yastatic.net;
     style-src 'self' 'unsafe-inline';
-    img-src 'self' blob: data: https://mc.yandex.ru;
+    img-src 'self' blob: data: https://mc.yandex.ru https://yastatic.net;
     font-src 'self' data:;
     object-src 'none';
     base-uri 'self';
