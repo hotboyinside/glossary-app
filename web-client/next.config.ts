@@ -10,6 +10,7 @@ const cspHeader = `
       'unsafe-inline'
       'unsafe-eval'
       https://mc.yandex.ru
+      https://mc.yandex.com 
       https://metrika.yandex.ru
       https://metrika.yandex.by
       https://metrica.yandex.com
@@ -18,6 +19,8 @@ const cspHeader = `
     connect-src
       'self'
       ${apiHost}
+      https://mc.yandex.ru 
+      https://mc.yandex.com 
       https://metrika.yandex.ru
       https://metrika.yandex.by
       https://metrica.yandex.com
@@ -27,6 +30,8 @@ const cspHeader = `
       'self'
       data:
       blob:
+      https://mc.yandex.ru 
+      https://mc.yandex.com
       https://metrika.yandex.ru
       https://metrika.yandex.by
       https://metrica.yandex.com
