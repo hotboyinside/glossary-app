@@ -37,7 +37,9 @@ export default function KeywordsPage() {
               onClick={() => router.push(appRoutes.keywordById(keywordData._id))}
             >
               <div className="font-medium">{keywordData.term}</div>
-              <div className="text-sm text-neutral-400 mt-2">{keywordData.definition}</div>
+              <div className="text-sm text-neutral-400 mt-2 line-clamp-3 break-words">
+                {keywordData.definition}
+              </div>
             </div>
           ))}
         </div>

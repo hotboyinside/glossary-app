@@ -25,11 +25,15 @@ services:
   web-client:
     build:
       context: ../web-client
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.local
       args:
         NEXT_PUBLIC_API_URL: http://localhost:5000
     container_name: web-client
     restart: unless-stopped
+    volumes:
+      - ../web-client:/app
+      - /app/node_modules
+      - /app/.next
     depends_on:
       - app
     ports:
