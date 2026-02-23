@@ -4,18 +4,52 @@ const apiHost = process.env.NEXT_PUBLIC_API_URL;
 
 const cspHeader = `
     default-src 'self';
-    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://mc.yandex.ru https://yastatic.net;
+
+    script-src
+      'self'
+      'unsafe-inline'
+      'unsafe-eval'
+      https://metrika.yandex.ru
+      https://metrika.yandex.by
+      https://metrica.yandex.com
+      https://metrica.yandex.com.tr;
+      
+    connect-src
+      'self'
+      ${apiHost}
+      https://metrika.yandex.ru
+      https://metrika.yandex.by
+      https://metrica.yandex.com
+      https://metrica.yandex.com.tr;
+    
+    img-src
+      'self'
+      data:
+      blob:
+      https://metrika.yandex.ru
+      https://metrika.yandex.by
+      https://metrica.yandex.com
+      https://metrica.yandex.com.tr;
+    
+    frame-src
+      'self'
+      https://metrika.yandex.ru
+      https://metrica.yandex.com
+      https://*.webvisor.com;
+    
+    frame-ancestors
+      'self'
+      https://metrika.yandex.ru
+      https://metrica.yandex.com
+      https://metrica.yandex.com.tr
+      https://*.webvisor.com;
+    
     style-src 'self' 'unsafe-inline';
-    img-src 'self' blob: data: https://mc.yandex.ru https://yastatic.net;
     font-src 'self' data:;
     object-src 'none';
     base-uri 'self';
     form-action 'self';
     upgrade-insecure-requests;
-    connect-src 'self' ${apiHost} https://mc.yandex.ru wss://mc.yandex.ru;
-    frame-src 'self' https://mc.yandex.ru;
-    frame-ancestors 'self' https://metrika.yandex.ru https://metrica.yandex.com https://*.webvisor.com;
-    child-src 'self' blob: https://mc.yandex.ru;
 `;
 
 const nextConfig: NextConfig = {
