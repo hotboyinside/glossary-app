@@ -21,6 +21,8 @@ const cspHeader = `
       ${apiHost}
       https://mc.yandex.ru 
       https://mc.yandex.com 
+      wss://mc.yandex.ru
+      wss://mc.yandex.com
       https://metrika.yandex.ru
       https://metrika.yandex.by
       https://metrica.yandex.com
