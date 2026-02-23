@@ -32,6 +32,7 @@ const createGraph = (relatedKeywords: { id: string; term: string }[]): Node[] =>
       y: Y_POSITION,
     },
     data: { label: keyword.term },
+    className: 'dark:text-blue-950! dark:border-blue-400!',
   }));
 };
 
@@ -43,7 +44,12 @@ export default function Graph({ keyword, related, onNodeClick }: GraphProps) {
   const relatedNodes = createGraph(related);
 
   const initialNodes: Node[] = [
-    { id: keyword.id, position: { x: 0, y: 0 }, data: { label: keyword.term } },
+    {
+      id: keyword.id,
+      position: { x: 0, y: 0 },
+      data: { label: keyword.term },
+      className: 'dark:text-blue-950! dark:border-blue-400!',
+    },
     ...relatedNodes,
   ];
 
@@ -72,10 +78,8 @@ export default function Graph({ keyword, related, onNodeClick }: GraphProps) {
     [],
   );
 
-  // ✅ Handle clicks on child nodes
   const handleNodeClick = useCallback(
-    (event: React.MouseEvent, node: Node) => {
-      // Only trigger callback for child nodes (not main node)
+    (_: React.MouseEvent, node: Node) => {
       if (node.id !== keyword.id && onNodeClick) {
         onNodeClick(node.id);
       }

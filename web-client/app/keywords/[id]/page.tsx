@@ -1,4 +1,4 @@
-'use client'; // <- important
+'use client';
 import Container from '@/components/container/Container';
 import Graph from '@/components/keywords/Graph';
 import { apiRoutes } from '@/constants/apiRoutes';
@@ -64,7 +64,7 @@ export default function Page() {
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 underline"
+                  className="text-blue-600 underline break-all"
                 >
                   {s.url}
                 </a>
