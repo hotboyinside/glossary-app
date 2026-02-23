@@ -9,11 +9,12 @@ const cspHeader = `
       'self'
       'unsafe-inline'
       'unsafe-eval'
+      https://mc.yandex.ru
       https://metrika.yandex.ru
       https://metrika.yandex.by
       https://metrica.yandex.com
       https://metrica.yandex.com.tr;
-      
+
     connect-src
       'self'
       ${apiHost}
