@@ -20,8 +20,8 @@ services:
       - .env.prod
     environment:
       MONGO_URL: mongodb://${MONGO_ROOT_USER}:${MONGO_ROOT_PASSWORD}@mongodb:27017/${MONGO_DB}?authSource=admin
-    ports:
-      - '5000'
+    expose:
+      - "5000"
 
   web-client:
     build:
@@ -29,7 +29,7 @@ services:
       args:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     restart: unless-stopped
-    ports:
+    expose:
       - '3000'
 
   nginx:
