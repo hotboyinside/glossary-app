@@ -7,6 +7,7 @@ RUN npm ci
 
 COPY . .
 
+RUN npm run lint
 RUN npm run build
 
 EXPOSE 5000

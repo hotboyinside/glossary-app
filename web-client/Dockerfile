@@ -16,6 +16,7 @@ ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN npm run lint
 RUN npm run build
 
 # -------- Runtime --------

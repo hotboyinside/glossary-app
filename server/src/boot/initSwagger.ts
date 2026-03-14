@@ -17,6 +17,7 @@ async function initSwagger(fastify: FastifyInstance) {
 
 	await fastify.register(swaggerUi, {
 		routePrefix: '/docs',
+		indexPrefix: '/api',
 	});
 }
 

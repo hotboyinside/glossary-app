@@ -33,5 +33,5 @@
 
 - **CI/CD has no build or lint step** — the pipeline goes straight from `git pull` to `docker compose up --build` with no verification gate (`deploy.yml`).
 - **`sudo git pull` in CI** — runs git as root, which can cause file permission issues on the VPS.
-- **No health checks in docker-compose** — `depends_on: mongodb` only waits for the container to start, not for MongoDB to be ready. App can crash on startup if DB isn't ready yet.
-- **No `NEXT_PUBLIC_API_URL` fallback** — if the env var is not set, all API calls silently go to `undefined/keywords` (`web-client/constants/apiRoutes.ts`).
+- [x] **No health checks in docker-compose** — `depends_on: mongodb` only waits for the container to start, not for MongoDB to be ready. App can crash on startup if DB isn't ready yet. **Fixed: added `healthcheck` with `mongosh ping` to the mongodb service and changed `depends_on` to `condition: service_healthy` in both `docker-compose.yaml` and `docker-compose.prod.yml`.**
+- [x] **No `NEXT_PUBLIC_API_URL` fallback** — if the env var is not set, all API calls silently go to `undefined/keywords` (`web-client/constants/apiRoutes.ts`). **Fixed: added `?? ''` fallback so requests go to the same origin rather than a broken `undefined` prefix.**
