@@ -3,9 +3,11 @@ services:
     image: mongodb/mongodb-community-server:8.0-ubi8
     container_name: mongo
     restart: unless-stopped
+    env_file:
+      - .env.dev
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=user
-      - MONGO_INITDB_ROOT_PASSWORD=pass
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
     volumes:
       - ./data:/data/db
     ports:
@@ -18,8 +20,10 @@ services:
     restart: unless-stopped
     depends_on:
       - mongodb
+    env_file:
+      - .env.dev
     environment:
-      MONGO_URL: mongodb://user:pass@mongodb:27017/glossary?authSource=admin
+      MONGO_URL: mongodb://${MONGO_ROOT_USER}:${MONGO_ROOT_PASSWORD}@mongodb:27017/${MONGO_DB}?authSource=admin
     ports:
       - '5000:5000'
   web-client:

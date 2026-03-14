@@ -19,7 +19,7 @@ export default function KeywordsPage() {
   useEffect(() => {
     fetch(apiRoutes.keywords)
       .then((res) => res.json())
-      .then(setKeywords);
+      .then((json) => setKeywords(json.data));
   }, []);
 
   return (

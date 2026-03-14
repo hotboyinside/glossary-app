@@ -5,13 +5,12 @@ import fp from 'fastify-plugin';
 import { join } from 'path';
 import initMongoDb from './boot/initMongoDb';
 import initRepositories from './boot/initRepositories';
+import initResponseFormat from './boot/initResponseFormat';
+import initSwagger from './boot/initSwagger';
 import { loggerConfig } from './config/logger';
 import { vars } from './config/vars';
 
-async function serviceApp(
-	fastify: FastifyInstance,
-	opts: FastifyPluginOptions,
-) {
+async function serviceApp(fastify: FastifyInstance, opts: FastifyPluginOptions) {
 	fastify.register(fastifyAutoload, {
 		dir: join(__dirname, 'routes'),
 		autoHooks: true,
@@ -36,6 +35,8 @@ const app = Fastify({
 	},
 });
 
+app.register(initSwagger);
+app.register(initResponseFormat);
 app.register(cors, {
 	origin: vars.ORIGIN_URL,
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -58,4 +59,4 @@ const start = async () => {
 	}
 };
 
-start();
+void start();
