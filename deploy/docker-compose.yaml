@@ -12,6 +12,12 @@ services:
       - ./data:/data/db
     ports:
       - '27017:27017'
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
   app:
     build:
       context: ../server
@@ -19,7 +25,8 @@ services:
     container_name: app
     restart: unless-stopped
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     env_file:
       - .env.dev
     environment:
