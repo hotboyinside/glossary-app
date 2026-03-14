@@ -33,7 +33,7 @@ export default function Page() {
   useEffect(() => {
     fetch(apiRoutes.keywordByIdWithRelated(preparedId))
       .then((res) => res.json())
-      .then((json) => setData(json))
+      .then((json) => setData(json.data))
       .finally(() => setLoading(false));
   }, [preparedId]);
 
@@ -54,7 +54,7 @@ export default function Page() {
         <h1 className="text-2xl font-bold">{data.keyword.term}</h1>
         <p>{data.keyword.definition}</p>
 
-        {data.keyword.sources?.length && (
+        {data.keyword.sources && data.keyword.sources.length > 0 && (
           <div className="space-y-1">
             <h2 className="font-semibold mb-1">Источники:</h2>
             {data.keyword.sources.map((s, idx) => (
