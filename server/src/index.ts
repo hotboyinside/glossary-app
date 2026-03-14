@@ -8,10 +8,7 @@ import initRepositories from './boot/initRepositories';
 import { loggerConfig } from './config/logger';
 import { vars } from './config/vars';
 
-async function serviceApp(
-	fastify: FastifyInstance,
-	opts: FastifyPluginOptions,
-) {
+async function serviceApp(fastify: FastifyInstance, opts: FastifyPluginOptions) {
 	fastify.register(fastifyAutoload, {
 		dir: join(__dirname, 'routes'),
 		autoHooks: true,
@@ -58,4 +55,4 @@ const start = async () => {
 	}
 };
 
-start();
+void start();
