@@ -27,34 +27,34 @@ export class KeywordsRepository {
 		return this.collection.findOne({ _id: objectId });
 	}
 
-	async findRelated(id: string | ObjectId) {
-		const objectId = typeof id === 'string' ? new ObjectId(id) : id;
-		const keyword = await this.collection.findOne({ _id: objectId });
+	async findRelatedByIds(relatedIds: ObjectId[]) {
+		if (relatedIds.length === 0) return [];
 
-		if (!keyword) {
-			return [];
-		}
-
-		if (!keyword.relatedIds || keyword.relatedIds.length === 0) {
-			return [];
-		}
-
-		const relatedKeywordsCursor = this.collection.find({
-			_id: { $in: keyword.relatedIds },
-		});
-
-		const relatedKeywords = await relatedKeywordsCursor.toArray();
-		return relatedKeywords;
+		return this.collection
+			.find({ _id: { $in: relatedIds } }, { projection: { _id: 1, term: 1 } })
+			.toArray();
 	}
 
-	findAll(options: { sortByTerm?: boolean }) {
-		const query = this.collection.find();
+	findAll(options: { sortByTerm?: boolean; limit?: number; skip?: number }) {
+		const query = this.collection.find({}, { projection: { _id: 1, term: 1, definition: 1 } });
 
 		if (options.sortByTerm) {
 			query.sort({ term: 1 });
 		}
 
+		if (options.skip) {
+			query.skip(options.skip);
+		}
+
+		if (options.limit) {
+			query.limit(options.limit);
+		}
+
 		return query.toArray();
+	}
+
+	countAll() {
+		return this.collection.countDocuments();
 	}
 
 	create(dto: CreateKeywordDto) {

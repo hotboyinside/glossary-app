@@ -1,13 +1,13 @@
 import { FastifyPluginAsyncTypebox, Type } from '@fastify/type-provider-typebox';
-import fp from 'fastify-plugin';
 import {
 	KeywordListItemSchema,
 	KeywordSchema,
 	KeywordSummarySchema,
 } from '../../../schemas/keyword';
 import { MongoId } from '../../../schemas/common';
-import { DataResponse, ErrorResponse } from '../../../schemas/response';
+import { DataResponse, ErrorResponse, PaginatedResponse } from '../../../schemas/response';
 import { dataResponse } from '../../../utils/response';
+import { Pagination } from '../../../constants/pagination';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
 	const { keywordsRepository } = fastify;
@@ -18,20 +18,44 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
 			schema: {
 				summary: 'List all keywords',
 				tags: ['keywords'],
+				querystring: Type.Object({
+					page: Type.Optional(Type.Number({ minimum: 1, default: Pagination.DEFAULT_PAGE })),
+					limit: Type.Optional(
+						Type.Number({
+							minimum: 1,
+							maximum: Pagination.MAX_LIMIT,
+							default: Pagination.DEFAULT_LIMIT,
+						}),
+					),
+				}),
 				response: {
-					200: DataResponse(Type.Array(KeywordListItemSchema)),
+					200: PaginatedResponse(KeywordListItemSchema),
 				},
 			},
 		},
-		async () => {
-			const keywords = await keywordsRepository.findAll({ sortByTerm: true });
-			return dataResponse(
-				keywords.map((k) => ({
+		async (request) => {
+			const page = request.query.page ?? Pagination.DEFAULT_PAGE;
+			const limit = request.query.limit ?? Pagination.DEFAULT_LIMIT;
+			const skip = (page - 1) * limit;
+
+			const [keywords, total] = await Promise.all([
+				keywordsRepository.findAll({ sortByTerm: true, limit, skip }),
+				keywordsRepository.countAll(),
+			]);
+
+			return {
+				data: keywords.map((k) => ({
 					_id: k._id.toHexString(),
 					term: k.term,
 					definition: k.definition,
 				})),
-			);
+				pagination: {
+					page,
+					limit,
+					total,
+					totalPages: Math.ceil(total / limit),
+				},
+			};
 		},
 	);
 
@@ -66,7 +90,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
 				});
 			}
 
-			const relatedKeywords = await keywordsRepository.findRelated(id);
+			const relatedKeywords = await keywordsRepository.findRelatedByIds(keyword.relatedIds ?? []);
 
 			return dataResponse({
 				keyword: {
@@ -84,4 +108,4 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
 	);
 };
 
-export default fp(plugin);
+export default plugin;

@@ -9,21 +9,21 @@
 
 ## Performance
 
-- **Double DB query in GET /keywords/:id/graph** — `findRelated()` re-fetches the keyword that was already fetched by `findById()` — 3 queries instead of 2 (`server/src/repositories/keywords.ts:30-48`).
-- **No caching on client fetches** — raw `fetch` in `useEffect` with no caching or deduplication. Every page visit re-fetches all data (`web-client/app/keywords/page.tsx:19-23`).
-- **No pagination** — `GET /keywords` returns all records at once. `findAll` needs `limit`/`skip` parameters.
+- [x] **Double DB query in GET /keywords/:id/graph** — `findRelated()` re-fetches the keyword that was already fetched by `findById()` — 3 queries instead of 2. **Fixed: replaced `findRelated(id)` with `findRelatedByIds(relatedIds)` that accepts IDs directly — 1 query instead of 2. Added MongoDB projections to `findAll` and `findRelatedByIds` to transfer only needed fields.**
+- [x] **No caching on client fetches** — raw `fetch` in `useEffect` with no caching or deduplication. **Fixed: pages converted to Server Components with `next: { revalidate: 60 }` ISR caching.**
+- [x] **No pagination** — `GET /keywords` returns all records at once. **Fixed: added `page`/`limit` query params (default 20, max 100) with `PaginatedResponse` schema returning `{ data, pagination: { page, limit, total, totalPages } }`. `countAll()` and `findAll()` run in parallel via `Promise.all`.**
 
 ## Code Quality
 
-- **No error handling in client fetch calls** — missing `res.ok` check and `.catch()` handler. API errors silently result in bad state (`web-client/app/keywords/page.tsx:19-23`, `web-client/app/keywords/[id]/page.tsx:33-37`).
+- [x] **No error handling in client fetch calls** — missing `res.ok` check and `.catch()` handler. **Fixed: pages are now Server Components; `getKeywords()` checks `res.ok` and returns `[]` on failure; `getKeywordData()` checks `res.ok` and calls `notFound()` on failure.**
 - [x] **Falsy check bug with sources** — `{data.keyword.sources?.length && (...)}` renders `0` to the DOM when sources is an empty array. **Fixed: changed to `sources && sources.length > 0 &&`.**
-- **Type duplication** — `Keyword`, `KeywordSource`, `KeywordData` interfaces are redefined in multiple files with no shared source of truth.
-- **Unnecessary `fp()` wrapper on routes plugin** — wrapping route plugins with `fastify-plugin` breaks Fastify encapsulation. Only decorators/hooks should use `fp` (`server/src/routes/api/keywords/index.ts`).
+- [x] **Type duplication** — `Keyword`, `KeywordSource`, `KeywordData` interfaces are redefined in multiple files with no shared source of truth. **Fixed: created `web-client/types/keyword.ts` with shared types (`KeywordListItem`, `KeywordDetail`, `KeywordSummary`, `KeywordGraphData`, `KeywordSource`); all components import from this single file.**
+- [x] **Unnecessary `fp()` wrapper on routes plugin** — wrapping route plugins with `fastify-plugin` breaks Fastify encapsulation. **Fixed: removed `fp()` wrapper, plugin exported directly.**
 
 ## Architecture
 
-- **No loading/error states on keywords list** — `web-client/app/keywords/page.tsx` shows a blank page until data loads. No error state, no empty state.
-- **Client components where Server Components would work** — both keyword pages use `'use client'` only for data fetching. Next.js App Router supports server-side `fetch` natively, which would reduce client JS and improve performance.
+- [x] **No loading/error states on keywords list** — `web-client/app/keywords/page.tsx` shows a blank page until data loads. **Fixed: page is now a Server Component — SSR renders the full list, no loading state needed. 404 detail pages handled via `notFound()`.**
+- [x] **Client components where Server Components would work** — both keyword pages use `'use client'` only for data fetching. **Fixed: both pages converted to async Server Components. Only the Graph (interactive @xyflow/react) remains client-side, lazy-loaded via `dynamic()` with `ssr: false`.**
 
 ## Testing
 
