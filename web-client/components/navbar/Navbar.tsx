@@ -35,7 +35,7 @@ export default function Navbar() {
                 className={clsx(
                   'text-sm font-medium transition',
                   isActive
-                    ? 'text-blue-600'
+                    ? 'text-indigo-600'
                     : 'text-gray-600 hover:text-black dark:text-gray-300 dark:hover:text-white',
                 )}
               >
@@ -71,7 +71,7 @@ export default function Navbar() {
                 className={clsx(
                   'block rounded-lg px-3 py-2 text-sm font-medium transition',
                   pathname === link.href
-                    ? 'bg-blue-50 text-blue-600 dark:bg-blue-500/10'
+                    ? 'bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10'
                     : 'text-gray-700 hover:bg-black/5 dark:text-gray-300 dark:hover:bg-white/10',
                 )}
               >
