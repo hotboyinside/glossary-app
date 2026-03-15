@@ -20,3 +20,6 @@ deploy/data/
 # Logs
 logs/
 *.log
+
+# Claude
+my-claude-plugin
