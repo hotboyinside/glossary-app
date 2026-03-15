@@ -1,5 +1,5 @@
 'use client';
-import { KeywordData } from '@/app/keywords/[id]/page';
+import { KeywordGraphData } from '@/types/keyword';
 import {
   addEdge,
   applyEdgeChanges,
@@ -13,7 +13,7 @@ import {
   MarkerType,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 const NODE_WIDTH = 140;
 const GAP = 40;
@@ -36,29 +36,30 @@ const createGraph = (relatedKeywords: { id: string; term: string }[]): Node[] =>
   }));
 };
 
-interface GraphProps extends KeywordData {
+interface GraphProps extends KeywordGraphData {
   onNodeClick?: (nodeId: string) => void;
 }
 
 export default function Graph({ keyword, related, onNodeClick }: GraphProps) {
-  const relatedNodes = createGraph(related);
-
-  const initialNodes: Node[] = [
-    {
-      id: keyword.id,
-      position: { x: 0, y: 0 },
-      data: { label: keyword.term },
-      className: 'dark:text-blue-950! dark:border-blue-400!',
-    },
-    ...relatedNodes,
-  ];
-
-  const initialEdges: Edge[] = related.map((rk) => ({
-    id: `${keyword.id}-${rk.id}`,
-    source: keyword.id,
-    target: rk.id,
-    markerEnd: { type: MarkerType.ArrowClosed },
-  }));
+  const { initialNodes, initialEdges } = useMemo(() => {
+    const relatedNodes = createGraph(related);
+    const nodes: Node[] = [
+      {
+        id: keyword.id,
+        position: { x: 0, y: 0 },
+        data: { label: keyword.term },
+        className: 'dark:text-blue-950! dark:border-blue-400!',
+      },
+      ...relatedNodes,
+    ];
+    const edges: Edge[] = related.map((rk) => ({
+      id: `${keyword.id}-${rk.id}`,
+      source: keyword.id,
+      target: rk.id,
+      markerEnd: { type: MarkerType.ArrowClosed },
+    }));
+    return { initialNodes: nodes, initialEdges: edges };
+  }, [keyword.id, keyword.term, related]);
 
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
