@@ -6,18 +6,18 @@ import { KeywordGraphData } from '@/types/keyword';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-async function getKeywordData(id: string): Promise<KeywordGraphData | null> {
-  const { data } = await fetchApi<KeywordGraphData>(apiRoutes.keywordByIdWithRelated(id), {
+async function getKeywordData(id: string) {
+  return fetchApi<KeywordGraphData>(apiRoutes.keywordByIdWithRelated(id), {
     next: { revalidate: 60 },
   });
-  return data;
 }
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const data = await getKeywordData(id);
+  const { data, error, status } = await getKeywordData(id);
 
-  if (!data) notFound();
+  if (status === 404) notFound();
+  if (!data) throw new Error(error ?? 'Failed to load keyword data');
 
   return (
     <section className="py-12 bg-white dark:bg-gray-800 min-h-dvh">
