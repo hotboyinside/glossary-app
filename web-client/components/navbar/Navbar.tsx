@@ -16,7 +16,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-b border-black/10 dark:border-white/10">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-black/[0.06] dark:border-white/[0.06]">
       <Container className="h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="font-semibold text-lg">
@@ -61,7 +61,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <nav className="md:hidden border-t border-black/10 dark:border-white/10 bg-white dark:bg-gray-900">
+        <nav className="md:hidden border-t border-black/[0.06] dark:border-white/[0.06] bg-white/95 dark:bg-gray-950/95 backdrop-blur-md">
           <Container className="py-3 space-y-2">
             {links.map((link) => (
               <Link
