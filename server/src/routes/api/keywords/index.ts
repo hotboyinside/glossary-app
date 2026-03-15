@@ -13,7 +13,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
 	const { keywordsRepository } = fastify;
 
 	fastify.get(
-		'/keywords',
+		'/',
 		{
 			schema: {
 				summary: 'List all keywords',
@@ -60,7 +60,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
 	);
 
 	fastify.get(
-		'/keywords/:id/graph',
+		'/:id/graph',
 		{
 			schema: {
 				summary: 'Get a keyword with its related keywords',

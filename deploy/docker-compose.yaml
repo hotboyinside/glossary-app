@@ -3,17 +3,16 @@ services:
     image: mongodb/mongodb-community-server:8.0-ubi8
     container_name: mongo
     restart: unless-stopped
-    env_file:
-      - .env.dev
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
     volumes:
       - ./data:/data/db
     ports:
-      - '27017:27017'
+      - "27017:27017"
     healthcheck:
-      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      test:
+        ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -27,20 +26,20 @@ services:
     depends_on:
       mongodb:
         condition: service_healthy
-    env_file:
-      - .env.dev
     environment:
       MONGO_URL: mongodb://${MONGO_ROOT_USER}:${MONGO_ROOT_PASSWORD}@mongodb:27017/${MONGO_DB}?authSource=admin
     ports:
-      - '5000:5000'
+      - "5000:5000"
   web-client:
     build:
       context: ../web-client
       dockerfile: Dockerfile.local
       args:
-        NEXT_PUBLIC_API_URL: http://localhost:5000
+        NEXT_PUBLIC_API_URL: http://localhost:5000/api
     container_name: web-client
     restart: unless-stopped
+    environment:
+      API_URL: http://app:5000/api
     volumes:
       - ../web-client:/app
       - /app/node_modules
@@ -48,4 +47,4 @@ services:
     depends_on:
       - app
     ports:
-      - '3000:3000'
+      - "3000:3000"

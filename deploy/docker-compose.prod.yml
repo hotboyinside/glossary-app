@@ -36,6 +36,8 @@ services:
       args:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     restart: unless-stopped
+    environment:
+      API_URL: http://app:5000/api
     ports:
       - '3000'
 
