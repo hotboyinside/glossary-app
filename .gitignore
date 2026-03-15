@@ -22,4 +22,4 @@ logs/
 *.log
 
 # Claude
-my-claude-plugin
+.claude
