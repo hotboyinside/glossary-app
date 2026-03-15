@@ -11,7 +11,10 @@
 		"lint": "eslint src/",
 		"lint:fix": "eslint src/ --fix",
 		"format": "prettier --write src/",
-		"format:check": "prettier --check src/"
+		"format:check": "prettier --check src/",
+		"migrate:up": "node -r ts-node/register node_modules/.bin/migrate-mongo up -f src/boot/initMigrateMongo.ts",
+		"migrate:down": "node -r ts-node/register node_modules/.bin/migrate-mongo down -f src/boot/initMigrateMongo.ts",
+		"migrate:status": "node -r ts-node/register node_modules/.bin/migrate-mongo status -f src/boot/initMigrateMongo.ts"
 	},
 	"keywords": [],
 	"author": "",
@@ -32,11 +35,12 @@
 		"@fastify/autoload": "6.3.1",
 		"@fastify/cors": "11.2.0",
 		"@fastify/mongodb": "10.0.0",
-		"@fastify/swagger": "^9.7.0",
-		"@fastify/swagger-ui": "^5.2.5",
+		"@fastify/swagger": "9.7.0",
+		"@fastify/swagger-ui": "5.2.5",
 		"@fastify/type-provider-typebox": "6.1.0",
 		"dotenv": "17.2.3",
 		"fastify": "5.7.2",
-		"fastify-plugin": "5.1.0"
+		"fastify-plugin": "5.1.0",
+		"migrate-mongo": "14.0.7"
 	}
 }
